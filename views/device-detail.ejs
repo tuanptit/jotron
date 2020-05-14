@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+  <title>Kilomux Monitoring</title>
+
+  <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="/assets/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+  <link href="/css/londinium-theme.css" rel="stylesheet" type="text/css">
+  <link href="/css/styles.css" rel="stylesheet" type="text/css">
+  <!--<link href="/css/icons.css" rel="stylesheet" type="text/css">-->
+  <link href="/css/icons.css" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="/assets/lobibox/lobibox.css">
+
+  <script type="text/javascript" src="/assets/jquery/dist/jquery.min.js"></script>
+  <script type="text/javascript" src="/assets/jquery/dist/jquery-ui.min.js"></script>
+  <script src="/assets/lobibox/lobibox.min.js"></script>
+
+  <script type="text/javascript" src="/js/plugins/charts/sparkline.min.js"></script>
+
+  <script type="text/javascript" src="/js/plugins/forms/uniform.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/select2.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/autosize.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/inputlimit.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/listbox.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/multiselect.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/validate.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/tags.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/switch.min.js"></script>
+
+  <script type="text/javascript" src="/js/plugins/forms/uploader/plupload.full.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+
+  <script type="text/javascript" src="/js/plugins/forms/wysihtml5/wysihtml5.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/forms/wysihtml5/toolbar.js"></script>
+
+  <script type="text/javascript" src="/js/plugins/interface/daterangepicker.js"></script>
+  <script type="text/javascript" src="/js/plugins/interface/fancybox.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/interface/moment.js"></script>
+  <script type="text/javascript" src="/js/plugins/interface/jgrowl.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/interface/datatables.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/interface/colorpicker.js"></script>
+  <script type="text/javascript" src="/js/plugins/interface/fullcalendar.min.js"></script>
+  <script type="text/javascript" src="/js/plugins/interface/timepicker.min.js"></script>
+  <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="/js/application.js"></script>
+
+
+  <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.css" rel="stylesheet" />
+  <script data-require="datatables@*" data-semver="1.10.12" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+  <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+  <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+  <script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+  <script src='https://cdn.datatables.net/select/1.2.0/js/dataTables.select.min.js'></script>
+  <script src='//cdn.datatables.net/buttons/1.2.1/js/buttons.flash.min.js'></script>
+
+
+
+</head>
+
+<body>
+<!-- Page container -->
+<div class="page-container">
+
+  <%- include partial/nav-bar.ejs %>
+  <%- include partial/side-bar.ejs %>
+
+  <!-- Page content -->
+  <div class="page-content">
+
+    <!-- Modal -->
+    <div id="myModal" class="modal fade" role="dialog">
+      <div class="modal modal-demo" style="width: 30%">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h2 class="modal-title">CONFIRMATION!</h2>
+            </div>
+
+            <div class="modal-body with-padding">
+              <p>Bạn có muốn xóa tài sản này không?</p>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+              <button type="button" class="btn btn-primary" id="confirm">Đồng ý</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page header -->
+
+
+    <div style="margin-top: 20px;" class="callout callout-warning fade in">
+      <h5 style=" float: left" id="name-mux"><%=result.name%></h5>
+    </div>
+
+    <!-- Page tabs -->
+    <div class="tabbable page-tabs">
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#properties" data-toggle="tab"><i class="icon-info2"></i>Properties</a></li>
+        <li id="get-system" class=""><a href="#card" data-toggle="tab"><i class="icon-disk"></i>System</a></li>
+
+      </ul>
+      <div class="tab-content">
+        <!-- First tab -->
+        <div style="padding: 0 10%;" class="tab-pane fade active in" id="properties">
+          <div class="panel panel-default">
+            <div class="panel-heading panel-color">
+              <h6 class="panel-title"><i class="icon-insert-template"></i>Basic Information</h6>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th style="text-align: left">Property</th>
+                  <th style="text-align: left">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td id="mux-name" data-id="<%=result._id%>"><span class="label label-success"><%=result.name%></span></td>
+                </tr>
+                <tr>
+                  <td>IP Address</td>
+                  <td id="device-ip"><span class="label label-success"><%=result.ip_address%></span></td>
+                </tr>
+                <tr>
+                  <td>Radio Type</td>
+                  <td id="mux-ip"><span class="label label-success"><%=result.radio_type%></span></td>
+                </tr>
+                <tr>
+                  <td>Serial Number</td>
+                  <td id="mux-ip"><span class="label label-success"><%=result.serial_number%></span></td>
+                </tr>
+
+                <tr>
+                  <td>Radio ID</td>
+                  <td id="mux-ip"><span class="label label-success"><%=result.radio_id%></span></td>
+                </tr>
+
+                <tr>
+                  <td>Software Version ID</td>
+                  <td id="mux-ip"><span class="label label-success"><%=result.sw_version%></span></td>
+                </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <!-- /first tab -->
+
+        <!-- Second tab -->
+        <div style="padding: 0 5%" class="tab-pane fade" id="card">
+          <div class="panel panel-default">
+            <div class="panel-heading panel-color"><h6 class="panel-title"><i class="icon-insert-template"></i>Radio Operational State</h6></div>
+            <div class="table-responsive">
+              <div class="panel-group block" id="tbl-state">
+                <table class='table table-bordered' style="border-bottom: 1px solid #ccc;">
+                  <thead>
+                  <tr>
+
+                  </tr>
+                  </thead>
+                  <tbody id="body-state">
+                    <tr></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!--table bit-->
+          <div class="panel panel-default">
+            <div class="panel-heading panel-color"><h6 class="panel-title"><i class="icon-insert-template"></i>BITE measurements</h6></div>
+            <div class="table-responsive">
+              <div class="panel-group block" id="tbl-bit">
+                <table class='table table-bordered' style="border-bottom: 1px solid #ccc;">
+                  <tbody id="body-bit">
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <!--table Modulator -->
+          <div class="panel panel-default">
+            <div class="panel-heading panel-color"><h6 class="panel-title"><i class="icon-insert-template"></i>Measurements, Modulator module:</h6></div>
+            <div class="table-responsive">
+              <div class="panel-group block" id="list-table">
+                <table class='table table-bordered' style="border-bottom: 1px solid #ccc;">
+                  <tbody id="body-modulator">
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-actions text-right">
+            <input type="submit" id="btn-delete" device-id="<%=result._id%>" value="DELETE DEVICE" class="btn btn-danger"  data-toggle='modal' data-target='#myModal'>
+          </div>
+          <!--table Mainboard-->
+        </div>
+        <!-- /second tab -->
+
+        <!-- Third tab -->
+
+
+      </div>
+    </div>
+
+    <div id="default_modal" class="modal fade" tabindex="-1" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h4 class="modal-title">CARD CONFIGURATION</h4>
+          </div>
+
+          <div class="modal-body with-padding card-content">
+
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  <!-- /page content -->
+</div>
+
+</div>
+<!-- /page container -->
+<script type="text/javascript" src="/js/core/mux-detail.js"></script>
+<script type="text/javascript" src="/js/core/mux-alarm.js"></script>
+
+<script>
+  $(function () {
+    var socket = io("http://localhost:3000");
+    socket.on('trap', function (data) {
+      if(data == "1.3.6.1.4.1.22154.3.1.2.5.1.5.5.0") {
+        console.log("PTT");
+        setTimeout(function(){
+          $('#get-system').click();
+        },1500);
+      }
+    });
+  });
+</script>
+</body>
+</html>

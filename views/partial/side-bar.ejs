@@ -1,0 +1,83 @@
+<!-- Sidebar -->
+<div class="sidebar">
+    <div class="sidebar-content">
+<!--        &lt;!&ndash; User dropdown &ndash;&gt;-->
+<!--        <div class="user-menu dropdown">-->
+<!--            <a href="">-->
+<!--                <div class="user-info">-->
+<!--                </div>-->
+<!--            </a>-->
+<!--        </div>-->
+        <!-- /user dropdown -->
+
+
+        <!-- Main navigation -->
+        <ul class="navigation">
+            <li><a href="/alarm"><span>ALARM</span><i class="icon-bubble-notification"></i></a></li>
+            <li class="has-ul active">
+                <a href="#"><span>DEVICE</span><i class="icon-user-plus"></i></a>
+                <ul id="dynamic-sidebar">
+                    <li><a href="/add">ADD DEVICE</a></li>
+                </ul>
+            </li>
+            <!--<li id="li-admin-statistical"><a href="/admin/statistic"><span>Thống kê</span> <i class="icon-stats-up"></i></a></li>-->
+        </ul>
+        <!-- /main navigation -->
+
+    </div>
+</div>
+<script type="text/javascript" src="/js/core/sidebar.js"></script>
+<script type="text/javascript" src="/js/core/socket.io.js"></script>
+<script>
+    $(function () {
+        var socket = io("http://localhost:3000");
+        socket.on('trap', function (data) {
+            console.log(data);
+            for(var i = 0; i < data.pdu.varbinds.length; i++) {
+                if(data.pdu.varbinds[i].oid == "1.3.6.1.4.1.22154.3.1.2.5.2.1.0" ||
+                    data.pdu.varbinds[i].oid == "1.3.6.1.4.1.22154.3.1.2.5.2.1.0") {
+                    $(".lobibox-btn-default[data-type|='ok']").click();
+                    showNoti(3, "An error occurred. Please check the Alarm");
+                }
+            }
+
+        });
+    });
+
+    function showNoti(type, text) {
+        if (type == 1) {
+            Lobibox.notify('info', {
+                size: "mini",
+                delay: 3000,
+                position: 'bottom right',
+                msg: text
+            });
+        }
+        else if (type == 2) {
+            Lobibox.notify('warning', {
+                size: "mini",
+                delay: 3000,
+                position: 'bottom right',
+                msg: text
+            });
+        }
+        else if (type == 3) {
+            Lobibox.alert('error', {
+                size: "mini",
+                delay: 3000,
+                position: 'bottom right',
+                msg: text
+            });
+        }
+        else {
+            Lobibox.notify('success', {
+                size: "mini",
+                delay: 3000,
+                position: 'bottom right',
+                msg: text
+            });
+        }
+    }
+</script>
+
+<!-- /sidebar -->

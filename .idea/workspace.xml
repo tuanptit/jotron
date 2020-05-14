@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="50d5a5ea-1bab-459f-8e25-cbb25c9ff9c0" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ProjectId" id="1bcLGGMJ1P5vRn176zgf6J88g0t" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="javascript.nodejs.core.library.configured.version" value="8.9.4" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/public" />
+    <property name="nodejs_interpreter_path" value="node" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="nodejs_package_manager_path" value="npm" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Monotoring\VHF\app\model" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\Monotoring\VHF\public" />
+      <recent name="D:\Monotoring\VHF\views" />
+    </key>
+  </component>
+  <component name="ServiceViewManager">
+    <option name="viewStates">
+      <list>
+        <serviceView>
+          <treeState>
+            <expand />
+            <select />
+          </treeState>
+        </serviceView>
+      </list>
+    </option>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="50d5a5ea-1bab-459f-8e25-cbb25c9ff9c0" name="Default Changelist" comment="" />
+      <created>1588926337923</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1588926337923</updated>
+      <workItem from="1588926348420" duration="8468000" />
+      <workItem from="1588990050612" duration="12408000" />
+      <workItem from="1589032746206" duration="1261000" />
+      <workItem from="1589036020197" duration="4976000" />
+      <workItem from="1589041519118" duration="2500000" />
+      <workItem from="1589125027319" duration="822000" />
+      <workItem from="1589125853647" duration="29000" />
+      <workItem from="1589125899011" duration="1547000" />
+      <workItem from="1589127465092" duration="1452000" />
+      <workItem from="1589184349864" duration="1841000" />
+      <workItem from="1589203362755" duration="7141000" />
+      <workItem from="1589211692585" duration="5696000" />
+      <workItem from="1589248209360" duration="2429000" />
+      <workItem from="1589271922144" duration="4357000" />
+      <workItem from="1589291742675" duration="8505000" />
+      <workItem from="1589335553386" duration="2999000" />
+      <workItem from="1589339688230" duration="4726000" />
+      <workItem from="1589357436940" duration="5819000" />
+      <workItem from="1589379295653" duration="5546000" />
+      <workItem from="1589386873768" duration="555000" />
+      <workItem from="1589437536664" duration="302000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state width="1344" height="177" key="GridCell.Tab.0.bottom" timestamp="1588926866438">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1344" height="177" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1588926866438" />
+    <state width="1344" height="177" key="GridCell.Tab.0.center" timestamp="1588926866438">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1344" height="177" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1588926866438" />
+    <state width="1344" height="177" key="GridCell.Tab.0.left" timestamp="1588926866437">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1344" height="177" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1588926866437" />
+    <state width="1344" height="177" key="GridCell.Tab.0.right" timestamp="1588926866438">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1344" height="177" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1588926866438" />
+    <state x="-8" y="-8" width="1182" height="554" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1589358717814">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="-8" y="-8" width="1182" height="554" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog/0.0.1366.738@0.0.1366.738" timestamp="1589358717814" />
+  </component>
+</project>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
+    <title>Kilomux Monitoring</title>
+
+    <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link href="/assets/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="/css/londinium-theme.css" rel="stylesheet" type="text/css">
+    <link href="/css/styles.css" rel="stylesheet" type="text/css">
+    <!--<link href="/css/icons.css" rel="stylesheet" type="text/css">-->
+    <link href="/css/icons.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/lobibox/lobibox.css">
+
+    <script type="text/javascript" src="/assets/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript" src="/assets/jquery/dist/jquery-ui.min.js"></script>
+    <script src="/assets/lobibox/lobibox.min.js"></script>
+
+    <script type="text/javascript" src="/js/plugins/charts/sparkline.min.js"></script>
+
+    <script type="text/javascript" src="/js/plugins/forms/uniform.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/select2.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/autosize.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/inputlimit.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/listbox.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/multiselect.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/validate.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/tags.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/switch.min.js"></script>
+
+    <script type="text/javascript" src="/js/plugins/forms/uploader/plupload.full.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/uploader/plupload.queue.min.js"></script>
+
+    <script type="text/javascript" src="/js/plugins/forms/wysihtml5/wysihtml5.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/forms/wysihtml5/toolbar.js"></script>
+
+    <script type="text/javascript" src="/js/plugins/interface/daterangepicker.js"></script>
+    <script type="text/javascript" src="/js/plugins/interface/fancybox.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/interface/moment.js"></script>
+    <script type="text/javascript" src="/js/plugins/interface/jgrowl.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/interface/datatables.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/interface/colorpicker.js"></script>
+    <script type="text/javascript" src="/js/plugins/interface/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="/js/plugins/interface/timepicker.min.js"></script>
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/application.js"></script>
+
+    <script type="text/javascript" src="/js/core/alarm.js"></script>
+
+    <link href="https://cdn.datatables.net/buttons/1.2.2/css/buttons.dataTables.css" rel="stylesheet" />
+    <script data-require="datatables@*" data-semver="1.10.12" src="//cdn.datatables.net/1.10.12/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+    <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+    <script src="//cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+    <script src="//cdn.datatables.net/buttons/1.2.4/js/buttons.html5.min.js"></script>
+    <script src='https://cdn.datatables.net/select/1.2.0/js/dataTables.select.min.js'></script>
+    <script src='//cdn.datatables.net/buttons/1.2.1/js/buttons.flash.min.js'></script>
+
+
+
+</head>
+
+<body>
+<!-- Page container -->
+<div class="page-container">
+
+    <%- include partial/nav-bar.ejs %>
+    <%- include partial/side-bar.ejs %>
+
+    <!-- Page content -->
+    <div class="page-content">
+
+        <!-- Modal -->
+
+        <!-- Page header -->
+        <div style="margin-top: 20px;" class="callout callout-warning fade in">
+            <h5 style="">SYSTEM ALARM</h5>
+        </div>
+        <div style="padding: 0 5%;" class="tab-pane fade in">
+            <div class="panel panel-default" style="">
+                <div class="panel-heading panel-color"><h6 class="panel-title"><i class="icon-insert-template"></i>LIST ALARM</h6></div>
+                <div class="table-responsive">
+                    <div class="panel-group block" id="list-alarm">
+                        <table class='table table-bordered' id="tbl-list-alarm" style="border-bottom: 1px solid #ccc;">
+                            <thead>
+                            <tr>
+                                <th class='text-center'>NAME</th>
+                                <th class='text-center'>ERROR CODE</th>
+                                <th class='text-center'>DATE</th>
+                            </tr>
+                            </thead>
+                            <tbody id="body-alarm">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript" src="/js/core/socket.io.js"></script>
+<!-- /page container -->
+</body>
+</html>
