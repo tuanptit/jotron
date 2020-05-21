@@ -23,5 +23,7 @@ $(document).ready(function () {
                 "</li>")
         }
     });
+
+
     $("#home-page").addClass('active');
 })
