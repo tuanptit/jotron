@@ -10,10 +10,13 @@ var http = require('http');
 
 var Device = require('../app/model/device');
 var Alarm = require('../app/model/alarm');
+var async = require('async');
 
+var ping = require('ping');
 
 var socket = require('socket.io');
 var snmp = require ("net-snmp");
+
 /**
  * Get port from environment and store in Express.
  */
@@ -56,64 +59,94 @@ snmp.createReceiver(options, function(error, data){
     var date_now = new Date();
     var date = date_now.getHours()+":"+date_now.getMinutes()+":"+date_now.getSeconds()+
         " "+date_now.getDate()+"/"+parseInt(date_now.getMonth()+1)+"/"+date_now.getFullYear();
-    if(oid == "1.3.6.1.4.1.22154.3.1.2.5.2.1.0" || oid == "1.3.6.1.4.1.22154.3.1.2.5.2.1.0") {
+    if(oid == "1.3.6.1.4.1.22154.3.1.2.5.1.1.0" || oid == "1.3.6.1.4.1.22154.3.1.2.5.2.1.0") {
+      console.log('ALARM!');
       var buf = data.pdu.varbinds[i].value;
       var json = buf.toJSON(buf);
       var data_buf = json.data;
-
-      console.log(data_buf);
       var buffer_data = "";
       for( var k = 0; k < data_buf.length; k ++) {
         var bin = data_buf[k].toString(2);
         while(bin.length < 8) {
           bin = "0" + bin;
         }
-        buffer_data = buffer_data+":"+bin;
+        buffer_data = buffer_data+bin;
       }
-      var result = buffer_data.substring(1);
+      var result = convertToAlarm(buffer_data, oid);
       var item = {
         ip: data.pdu.agentAddr,
         date: date,
         value: result
       }
+
       console.log(item);
-      if(item.ip != null) {
+      if(item.ip != null && item.value.length > 0) {
         var mAlarm = new Alarm({
           ip_address: item.ip,
           error: item.value,
-          date: date
+          date: date,
+          name: ""
         });
-
-        mAlarm.save(function (err) {
-          if (err) {
-            console.log(err)
-            io.sockets.emit('trap', err);
-            return;
+        Device.findOne({
+          ip_address: mAlarm.ip_address
+        }, function(err, device) {
+          var name ="";
+          if(device){
+             name = device.name;
           } else {
-            Device.update({
-              ip_address: mAlarm.ip_address
-            }, {
-              $push: {
-                alarms: mAlarm._id
-              }
-            }, function (err, newMux) {
-              if (err) {
-                console.log(err)
-                io.sockets.emit('trap', err);
-                return;
-              } else {
-                io.sockets.emit('trap', newMux);
-              }
-            });
+             name = "Unknown Device"
           }
-        })
+
+          mAlarm.name = name;
+          mAlarm.save(function(err) {
+            if(err) {
+              console.log(err)
+              io.sockets.emit('trap', err);
+              return;
+            } else{
+            }
+          });
+        });
       }
-
     }
-
     io.sockets.emit('trap', oid);
+    io.sockets.emit('alarm', oid);
   }
 
+});
+
+var frequency = 5000; //1 second
+Device.find({},
+    function (err, device) {
+      if(err) {
+        res.json({
+          code: 1,
+          result:'err'
+        })
+      } else {
+        var list =[];
+        for(var i = 0; i, i < device.length; i++) {
+          list.push(device[i].ip_address);
+        }
+        var frequency = 3000; //10 second
+        list.forEach(function(item){
+          setInterval(function() {
+            ping.sys.probe(item, function(active){
+              if(!active){
+                io.sockets.emit('ping-error', data = {
+                  ip_address: item,
+                  list: device
+                });
+              } else {
+                io.sockets.emit('ping-ok', data = {
+                  ip_address: item,
+                  list: device
+                });
+              }
+            });
+          }, frequency);
+        });
+      }
 });
 /**
  * Listen on provided port, on all network interfaces.
@@ -181,4 +214,40 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+}
+
+
+function convertToAlarm(bit, oid) {
+  var  TX_ALARMS =  ["txAlarm", "txPaModuleAlarm", "txModModuleAlarm", "txFrontModuleAlarm",
+    "txMainModuleAlarm","txExternalAlarm","txForcedAlarm","txExtUnitAlarm",
+    "txPASWRAlarm","txPACurrentAlarm","txPATemperatureAlarm","txPA28V0Alarm",
+    "txPA12V0Alarm","txPA5V0Alarm","txPA3V3Alarm","txPA5V0Neg",
+    "txPAFanFailure", "txPAPwrOutAlarm","txRFTuneAlarm","txModLoLvlAlarm",
+    "txModLoLockAlarm","txMod6V0Alarm","txPowerACAlarm","txMainInStby",
+    "txMainEthernetAlarm","txMainCodecAlarm","txMainSPIAlarm",
+    "txMainFrontAlarm","txMainRemExpAlarm","txMainBiteADCAlarm",
+    "txMainMemAlarm","txSpareAlarm31"];
+
+  var  RX_ALARMS = ["rxAlarm", "rxRfModuleAlarm", "rxPowerModuleAlarm", "rxFrontModuleAlarm",
+      "rxMainModuleAlarm","rxExternalAlarm","rxForcedAlarm","rxSpareAlarm7",
+      "rxRFLoLvlAlarm","rxRFLoLockAlarm","rxRF6V0Alarm","rxRFLNACurrentAlarm",
+      "rxRFIFCurrentAlarm","rxRF30V0Alarm","rxSpareAlarm14","rxPowerACAlarm",
+      "rxPower12V0Alarm","rxPower5V0Alarm","rxPower3V3Alarm","rxPowerAlarm",
+      "rxPowerCurrentAlarm","rxPowerDCInputAlarm","rxCodecLDAlarm","rxMainAGCAlarm",
+      "rxMainEthernetAlarm","rxMainCodecAlarm","rxMainSPIAlarm",
+      "rxMainFrontAlarm","rxMainRemExpAlarm","rxMainBiteADCAlarm",
+      "rxMainMemAlarm","rxMainIFAlarm"]
+  // bit = "11000000100000000000000100000000";
+  var arr = bit.split("");
+  var result = [];
+  for(var i = 0; i < arr.length; i++) {
+      if(arr[i] == "1") {
+        if(oid == "1.3.6.1.4.1.22154.3.1.2.5.1.1.0") {
+          result.push(TX_ALARMS[i]);
+        } else {
+          result.push(RX_ALARMS[i]);
+        }
+      }
+  }
+  return result;
 }

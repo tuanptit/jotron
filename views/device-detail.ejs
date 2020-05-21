@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximum-scale=1">
-  <title>Kilomux Monitoring</title>
+  <title>JOTRON Monitoring</title>
 
   <link href="/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="/assets/fontawesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -104,62 +104,14 @@
     <!-- Page tabs -->
     <div class="tabbable page-tabs">
       <ul class="nav nav-tabs">
-        <li class="active"><a href="#properties" data-toggle="tab"><i class="icon-info2"></i>Properties</a></li>
-        <li id="get-system" class=""><a href="#card" data-toggle="tab"><i class="icon-disk"></i>System</a></li>
+        <li  class="active" id="get-system" class=""><a href="#card" data-toggle="tab"><i class="icon-disk"></i>System</a></li>
+        <li id="get-alarm" class=""><a href="#alarm" data-toggle="tab"><i class="icon-notification"></i>Alarm</a></li>
+        <li><a href="#properties" data-toggle="tab"><i class="icon-info2"></i>Properties</a></li>
 
       </ul>
       <div class="tab-content">
         <!-- First tab -->
-        <div style="padding: 0 10%;" class="tab-pane fade active in" id="properties">
-          <div class="panel panel-default">
-            <div class="panel-heading panel-color">
-              <h6 class="panel-title"><i class="icon-insert-template"></i>Basic Information</h6>
-            </div>
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                <tr>
-                  <th style="text-align: left">Property</th>
-                  <th style="text-align: left">Value</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  <td>Name</td>
-                  <td id="mux-name" data-id="<%=result._id%>"><span class="label label-success"><%=result.name%></span></td>
-                </tr>
-                <tr>
-                  <td>IP Address</td>
-                  <td id="device-ip"><span class="label label-success"><%=result.ip_address%></span></td>
-                </tr>
-                <tr>
-                  <td>Radio Type</td>
-                  <td id="mux-ip"><span class="label label-success"><%=result.radio_type%></span></td>
-                </tr>
-                <tr>
-                  <td>Serial Number</td>
-                  <td id="mux-ip"><span class="label label-success"><%=result.serial_number%></span></td>
-                </tr>
-
-                <tr>
-                  <td>Radio ID</td>
-                  <td id="mux-ip"><span class="label label-success"><%=result.radio_id%></span></td>
-                </tr>
-
-                <tr>
-                  <td>Software Version ID</td>
-                  <td id="mux-ip"><span class="label label-success"><%=result.sw_version%></span></td>
-                </tr>
-
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <!-- /first tab -->
-
-        <!-- Second tab -->
-        <div style="padding: 0 5%" class="tab-pane fade" id="card">
+        <div style="padding: 0 5%" class="tab-pane fade active in" id="card">
           <div class="panel panel-default">
             <div class="panel-heading panel-color"><h6 class="panel-title"><i class="icon-insert-template"></i>Radio Operational State</h6></div>
             <div class="table-responsive">
@@ -171,7 +123,7 @@
                   </tr>
                   </thead>
                   <tbody id="body-state">
-                    <tr></tr>
+                  <tr></tr>
                   </tbody>
                 </table>
               </div>
@@ -204,14 +156,80 @@
             </div>
           </div>
 
+
+          <!--table Mainboard-->
+        </div>
+        <!-- /first tab -->
+
+        <!-- Second tab -->
+        <div style="padding: 0 10%;" class="tab-pane fade" id="properties">
+          <div class="panel panel-default">
+            <div class="panel-heading panel-color">
+              <h6 class="panel-title"><i class="icon-insert-template"></i>Basic Information</h6>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                <tr>
+                  <th style="text-align: left">Property</th>
+                  <th style="text-align: left">Value</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Name</td>
+                  <td id="mux-name" data-id="<%=result._id%>"><span class="label label-success"><%=result.name%></span></td>
+                </tr>
+                <tr>
+                  <td>IP Address</td>
+                  <td id="device-ip"><span class="label label-success"><%=result.ip_address%></span></td>
+                </tr>
+                <tr>
+                  <td>Radio Type</td>
+                  <td id=""><span class="label label-success"><%=result.radio_type%></span></td>
+                </tr>
+                <tr>
+                  <td>Serial Number</td>
+                  <td id=""><span class="label label-success"><%=result.serial_number%></span></td>
+                </tr>
+
+                <tr>
+                  <td>Radio ID</td>
+                  <td id="radio-id"><span class="label label-success"><%=result.radio_id%></span></td>
+                </tr>
+
+                <tr>
+                  <td>Software Version ID</td>
+                  <td id=""><span class="label label-success"><%=result.sw_version%></span></td>
+                </tr>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
           <div class="form-actions text-right">
             <input type="submit" id="btn-delete" device-id="<%=result._id%>" value="DELETE DEVICE" class="btn btn-danger"  data-toggle='modal' data-target='#myModal'>
           </div>
-          <!--table Mainboard-->
         </div>
         <!-- /second tab -->
 
         <!-- Third tab -->
+        <div style="padding: 0 5%" class="tab-pane fade" id="alarm">
+          <div class="panel panel-default">
+            <div class="panel-heading panel-color"><h6 class="panel-title"><i class="icon-insert-template"></i>RADIO ALARM</h6></div>
+            <div class="table-responsive">
+              <div class="panel-group block" id="tbl-alarm">
+                <table class='table table-bordered' style="border-bottom: 1px solid #ccc;">
+                  <tbody id="body-alarm">
+                  <tr id="noRecordTR" style="display:block">
+                    <th  style="text-align: center">PERFECT! There is no ALARM</th>
+                  </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
       </div>
@@ -245,15 +263,8 @@
 
 <script>
   $(function () {
-    var socket = io("http://localhost:3000");
-    socket.on('trap', function (data) {
-      if(data == "1.3.6.1.4.1.22154.3.1.2.5.1.5.5.0") {
-        console.log("PTT");
-        setTimeout(function(){
-          $('#get-system').click();
-        },1500);
-      }
-    });
+
+
   });
 </script>
 </body>

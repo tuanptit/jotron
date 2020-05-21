@@ -38,4 +38,6 @@ router.get('/alarm', function(req, res) {
 });
 
 router.get('/all/alarm', deviceCtr.getAllAlarm);
+
+router.get('/snmp/:type/:ip', deviceCtr.getSnmpAlarm);
 module.exports = router;

@@ -6,6 +6,9 @@ var deviceSchema = new Schema({
     ip_address: String,
     read_community: String,
     write_community: String,
-    alarms: [{type: Schema.Types.ObjectId, ref: 'Alarm'}]
+    has_alarm: {
+        type: Boolean,
+        default: false
+    }
 });
 module.exports = mongoose.model('Device', deviceSchema);

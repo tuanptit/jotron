@@ -59,7 +59,74 @@ $(document).ready(function () {
             console.log(err.toString());
         });
     });
+    $("#get-system").click();
 
+    $("#get-alarm").on('click', function() {
+        var type = $('#radio-id span').text().substring(0,2);
+        var ip_addrress = $("#device-ip span").text();
+        if(type == "RA") {
+            type = 1;
+        } else {
+            type = 0;
+        }
+        var ajax1 = $.ajax('/snmp/'+type+"/"+ip_addrress, {
+            method: 'GET',
+            beforeSend: function (){
+                $('body').append('<div class="overlay"><div class="opacity"></div><i class="icon-spinner3 spin"></i></div>');
+                $('.overlay').fadeIn(150);
+            }
+        }).success(function (res) {
+            window.setTimeout(function () {
+                $('.overlay').fadeOut(150, function () {
+                    $(this).remove();
+                });
+            }, 50);
+            var result = res.result;
+            var data = {
+                rxAlarm:             	"Failure on one or more boards",
+                rxRfModuleAlarm:     	"Failure on the Rf Module",
+                rxPowerModuleAlarm:  	"Failure on the Power Module",
+                rxFrontModuleAlarm:  	"Failure on the Front Module",
+                rxMainModuleAlarm:   	"Failure on the Main Module",
+                rxExternalAlarm:   	"External alarm detected",
+                rxForcedAlarm:	   "Forced alarm detected",
+                rxSpareAlarm:     "Spare bit",
+                rxRFLoLvlAlarm:	    "Alarm from LO lvl test in RF module",
+                rxRFLoLockAlarm:	"Alarm from LO lock test in RF module",
+                rxRF6V0Alarm:		"Alarm from 6V0 measurement in RF module",
+                rxRFLNACurrentAlarm:	"Alarm from LNA current measurement in RF module",
+                rxRFIFCurrentAlarm:	"Alarm from IF current measurement in RF module",
+                rxRF30V0Alarm:     	"Alarm from 30V measurement in RF module",
+                rxPowerACAlarm:     	"Alarm AC not detected",
+                rxPower12V0Alarm:      "Alarm from 12V bite in Power module",
+                rxPower5V0Alarm:      "Alarm from 5V bite in Power module",
+                rxPower3V3Alarm:     " Alarm from 3V3 bite in Power module",
+                rxPowerTempAlarm:	"Alarm from Temperature bite in Power module",
+                rxPowerCurrentAlarm:	"Alarm from Current bite in Power module",
+                rxPowerDCInputAlarm:  " Alarm from DC input in Main Module",
+                rxMainCodecLDAlarm:	"Failure lock detect codec/ethernet clock",
+                rxMainAGCAlarm: 	"Failure external AGC system",
+                rxMainEthernetAlarm: 	"Failure communicating with the ethernet_PHY",
+                rxMainCodecAlarm: 	"Failure communicating with the codec",
+                rxMainSPIAlarm:   	"Failure on the spi bus",
+                rxMainFrontAlarm:	"Failure communicating with the front module",
+                rxMainRemExpAlarm:	"Failure communicating with the rem expander",
+                rxMainBiteADCAlarm:	"Failure communicating with the bite adc",
+                rxMainMemAlarm:	"Failure in memory saving",
+                rxMainIFAlarm:	"Failure communicating with the IF circuit"
+            }
+            // console.log(data[tmp]);
+            if(result.length > 0) {
+                $('#body-alarm').empty();
+                $('#noRecordTR').css('display', 'none');
+            }
+            for(var i = 0; i < result.length; i++) {
+                $("#body-alarm ").append("<tr>" +
+                    "<th style='text-align: left; color: red;'>"+data[result[i]]+"</th>"+
+                    "</tr>");
+            }
+        });
+    });
 
     $("#btn-delete").unbind();
     $("#btn-delete").click(function (e) {

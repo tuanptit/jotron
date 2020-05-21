@@ -1,15 +1,14 @@
 $(document).ready(function () {
+    $('#alarm-page').addClass('active')
     var t = $("#tbl-list-alarm").DataTable({
         "retrieve": true,
         "lengthMenu": [5, 10, 50, 100],
         "pageLength": 30,
         "scrollX": true,
         dom: 'Bfrtip',
+        "ordering": false,
         buttons: [
-        ],
-        select: {
-            style : "multi"
-        }
+        ]
     });
     var ajax1 = $.ajax('/all/alarm', {
         method: 'GET',
@@ -41,9 +40,9 @@ $(document).ready(function () {
             data.forEach(function (value, index) {
                 var oid = "Unknown Error";
                 var value_data = "Unknown Value";
-                var name = "<span style='padding: 9px; font-size: 13px;' class='label label-info'>"+value.name+"</span>";
+                var name = "<span style='padding: 9px; font-size: 13px;' class='label label-success'>"+value.name+"</span>";
                 var error = "<span style='padding: 9px; font-size: 13px;' class='label label-danger'>"+value.error+"</span>";
-                var date = "<span style='padding: 9px; font-size: 13px;' class='label label-warning'>"+value.date+"</span>";
+                var date = "<span style='padding: 9px; font-size: 13px;' class='label label-default'>"+value.date+"</span>";
 
                 if(isNaN(parseInt(value_data))) {
                     t.row.add([name, error, date]).draw(false);

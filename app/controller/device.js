@@ -1,6 +1,9 @@
 var Device = require('../model/device');
 var Alarm = require('../model/alarm');
 var async = require('async');
+var snmp = require ("net-snmp");
+const Monitor = require('ping-monitor');
+
 exports.addDevice = function (req, res) {
     var device = new Device({
         name: req.body.name,
@@ -15,14 +18,12 @@ exports.addDevice = function (req, res) {
                 code: 0
             })
         } else {
-            res.render('add-device', { result: {
-                    code:1,
-                    status: 'Thêm thiết bị thành công'
-                }
-            });
+            return res.redirect('/device/'+device._id);
+
         }
     })
 }
+
 
 exports.getDevice = function(req, res) {
     Device.find({},
@@ -52,6 +53,63 @@ exports.getDevice = function(req, res) {
         })
 }
 
+exports.getSnmpAlarm = function (req, res) {
+    var ip = req.params.ip;
+    var type = req.params.type;
+    var options = {
+        port: 161,
+        retries: 1,
+        transport: "udp4",
+        trapPort: 162,
+        timeout: 1000,
+        version: snmp.Version1,
+        idBitsSize: 32
+    };
+
+    var session = snmp.createSession(ip, "public", options);
+
+    var oid = "1.3.6.1.4.1.22154.3.1.2.5.1.1.0";  // tx
+    if(type == 1){
+        oid = "1.3.6.1.4.1.22154.3.1.2.5.2.1.0"  // rx
+    }
+    var oids = [oid];
+
+    session.get (oids, function (error, varbinds) {
+        if (error) {
+            res.json({
+                code: 1
+            })
+        } else {
+            for (var i = 0; i < varbinds.length; i++) {
+                if (snmp.isVarbindError(varbinds[i])) {
+                    res.json({
+                        code: 1
+                    })
+                } else {
+                    var buf = varbinds[0].value;
+                    var json = buf.toJSON(buf);
+                    var data_buf = json.data;
+                    var buffer_data = "";
+                    for (var k = 0; k < data_buf.length; k++) {
+                        var bin = data_buf[k].toString(2);
+                        while (bin.length < 8) {
+                            bin = "0" + bin;
+                        }
+                        buffer_data = buffer_data + bin;
+                    }
+                    var result = convertToAlarm(buffer_data, oid);
+                    res.json({
+                        code: 0,
+                        result: result
+                    })
+                }
+            }
+        }
+        session.close ();
+    });
+
+}
+
 exports.getDeviceById = function(req, res) {
     var id = req.params.id;
     Device.findOne({
@@ -64,9 +122,11 @@ exports.getDeviceById = function(req, res) {
             })
         } else {
             var requset = require('request');
-            requset({
+            requset(
+                {
                 uri: 'http://'+device.ip_address
-            }, function (err, response, body) {
+                },
+                function (err, response, body) {
                 var jsdom = require('jsdom');
                 const { JSDOM } = jsdom;
                 const { window } = new JSDOM(body);
@@ -93,7 +153,7 @@ exports.getSystem = function (req, res) {
     var requset = require('request');
     requset({
         uri: 'http://'+ip_address+'/system.html'
-    }, function (err, response, body) {
+    },function (err, response, body) {
         var jsdom = require('jsdom');
         const { JSDOM } = jsdom;
         const { window } = new JSDOM(body);
@@ -152,29 +212,92 @@ exports.deleteDevice = function (req, res) {
 
 exports.getAllAlarm = function (req, res) {
     var list = [];
-    Alarm.find({}).sort({_id: -1}).exec(function (error, alarms) {
+    Alarm.find({}).sort({_id: -1}).exec(function (error,alarms ) {
         if(!error) {
-            async.eachSeries(alarms, function (alarm, callback) {
-                Device.findOne({
-                    ip_address: alarm.ip_address
-                }, function(err, device){
-                   var name = device.name;
-                   var date = alarm.date;
-                   var error = alarm.error;
-                   var item = {
-                       name: name,
-                       date: date,
-                       error: error
-                   }
-                   list.push(item);
-                   callback();
-                });
-            }, function() {
-                res.json({
-                    code: 1,
-                    result: list
-                })
-            });
+            res.json({
+                code: 1,
+                result: alarms
+            })
         }
     })
+}
+
+function getNewDeviceAlarm(ip, callback) {
+    var options = {
+        port: 161,
+        retries: 1,
+        transport: "udp4",
+        trapPort: 162,
+        timeout: 1000,
+        version: snmp.Version1,
+        idBitsSize: 32
+    };
+
+    var session = snmp.createSession(ip, "public", options);
+
+    var oids = ["1.3.6.1.4.1.22154.3.1.2.5.2.7.0"];
+
+    session.get (oids, function (error, varbinds) {
+        if (error) {
+            console.error (error);
+            callback();
+        } else {
+            for (var i = 0; i < varbinds.length; i++)
+                if (snmp.isVarbindError (varbinds[i])){
+                    console.log('loi roi')
+                    callback();
+                }
+                else{
+                    var buf = varbinds[i].value;
+                    var json = buf.toJSON(buf);
+                    var data_buf = json.data;
+                    var buffer_data = "";
+
+                    for( var k = 0; k < data_buf.length; k ++) {
+                        var bin = data_buf[k].toString(2);
+                        while(bin.length < 8) {
+                            bin = "0" + bin;
+                        }
+                        buffer_data = buffer_data+bin;
+                    }
+                    callback(buffer_data);
+                }
+        }
+        session.close ();
+    });
+}
+
+function convertToAlarm(bit, oid) {
+    var  TX_ALARMS =  ["txAlarm", "txPaModuleAlarm", "txModModuleAlarm", "txFrontModuleAlarm",
+        "txMainModuleAlarm","txExternalAlarm","txForcedAlarm","txExtUnitAlarm",
+        "txPASWRAlarm","txPACurrentAlarm","txPATemperatureAlarm","txPA28V0Alarm",
+        "txPA12V0Alarm","txPA5V0Alarm","txPA3V3Alarm","txPA5V0Neg",
+        "txPAFanFailure", "txPAPwrOutAlarm","txRFTuneAlarm","txModLoLvlAlarm",
+        "txModLoLockAlarm","txMod6V0Alarm","txPowerACAlarm","txMainInStby",
+        "txMainEthernetAlarm","txMainCodecAlarm","txMainSPIAlarm",
+        "txMainFrontAlarm","txMainRemExpAlarm","txMainBiteADCAlarm",
+        "txMainMemAlarm","txSpareAlarm31"];
+
+    var  RX_ALARMS = ["rxAlarm", "rxRfModuleAlarm", "rxPowerModuleAlarm", "rxFrontModuleAlarm",
+        "rxMainModuleAlarm","rxExternalAlarm","rxForcedAlarm","rxSpareAlarm7",
+        "rxRFLoLvlAlarm","rxRFLoLockAlarm","rxRF6V0Alarm","rxRFLNACurrentAlarm",
+        "rxRFIFCurrentAlarm","rxRF30V0Alarm","rxSpareAlarm14","rxPowerACAlarm",
+        "rxPower12V0Alarm","rxPower5V0Alarm","rxPower3V3Alarm","rxPowerAlarm",
+        "rxPowerCurrentAlarm","rxPowerDCInputAlarm","rxCodecLDAlarm","rxMainAGCAlarm",
+        "rxMainEthernetAlarm","rxMainCodecAlarm","rxMainSPIAlarm",
+        "rxMainFrontAlarm","rxMainRemExpAlarm","rxMainBiteADCAlarm",
+        "rxMainMemAlarm","rxMainIFAlarm"]
+    // bit = "11000000100000000000000100000000";
+    var arr = bit.split("");
+    var result = [];
+    for(var i = 0; i < arr.length; i++) {
+        if(arr[i] == "1") {
+            if(oid == "1.3.6.1.4.1.22154.3.1.2.5.1.1.0" || oid == "1.3.6.1.4.1.22154.3.1.2.5.1.1.0") {
+                result.push(TX_ALARMS[i]);
+            } else {
+                result.push(RX_ALARMS[i]);
+            }
+        }
+    }
+    return result;
 }
