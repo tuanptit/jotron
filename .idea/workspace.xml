@@ -1,11 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="50d5a5ea-1bab-459f-8e25-cbb25c9ff9c0" name="Default Changelist" comment="" />
+    <list default="true" id="50d5a5ea-1bab-459f-8e25-cbb25c9ff9c0" name="Default Changelist" comment="home.js">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/public/js/core/mux-alarm.js" beforeDir="false" afterPath="$PROJECT_DIR$/public/js/core/mux-alarm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/partial/side-bar.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/partial/side-bar.ejs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="tuanptit &lt;levantuanptit@gmail.com&gt;" />
+      </list>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1bcLGGMJ1P5vRn176zgf6J88g0t" />
   <component name="ProjectViewState">
@@ -15,9 +28,10 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="javascript.nodejs.core.library.configured.version" value="8.9.4" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/public" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path" value="node" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_package_manager_path" value="npm" />
@@ -84,13 +98,40 @@
       <workItem from="1589874783600" duration="8841000" />
       <workItem from="1589941477953" duration="8282000" />
       <workItem from="1589971901075" duration="11449000" />
+      <workItem from="1590025787372" duration="769000" />
+      <workItem from="1590049261246" duration="499000" />
+      <workItem from="1590117312382" duration="2493000" />
+      <workItem from="1590121233217" duration="268000" />
     </task>
+    <task id="LOCAL-00001" summary="home.js">
+      <created>1590026573175</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1590026573175</updated>
+    </task>
+    <task id="LOCAL-00002" summary="home.js">
+      <created>1590026702426</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1590026702426</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="1" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="home.js" />
+    <option name="LAST_COMMIT_MESSAGE" value="home.js" />
+  </component>
   <component name="WindowStateProjectService">
+    <state x="292" y="0" key="CommitChangelistDialog2" timestamp="1590026701535">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="292" y="0" key="CommitChangelistDialog2/0.0.1366.738@0.0.1366.738" timestamp="1590026701535" />
     <state width="1344" height="177" key="GridCell.Tab.0.bottom" timestamp="1588926866438">
       <screen x="0" y="0" width="1366" height="738" />
     </state>
@@ -107,6 +148,10 @@
       <screen x="0" y="0" width="1366" height="738" />
     </state>
     <state width="1344" height="177" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1588926866438" />
+    <state x="275" y="104" key="Vcs.Push.Dialog.v2" timestamp="1590026705740">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="275" y="104" key="Vcs.Push.Dialog.v2/0.0.1366.738@0.0.1366.738" timestamp="1590026705740" />
     <state x="-8" y="-8" width="1182" height="554" maximized="true" key="com.intellij.history.integration.ui.views.FileHistoryDialog" timestamp="1589358717814">
       <screen x="0" y="0" width="1366" height="738" />
     </state>

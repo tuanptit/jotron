@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $('#add-page').addClass('active')
     $("#get-system").on('click', function () {
         var ip_address = $('#device-ip').text();
         var ajax1 = $.ajax('/system/'+ip_address, {
