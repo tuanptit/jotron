@@ -22,7 +22,7 @@ $(document).ready(function () {
                 "<span class='bottom-info bg-primary'>"+result[i].ip_address+"</span>"+
                 "</li>")
         }
-    });
+});
 
 
     $("#home-page").addClass('active');

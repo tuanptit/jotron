@@ -115,7 +115,7 @@ snmp.createReceiver(options, function(error, data){
 
 });
 
-var frequency = 5000; //1 second
+var frequency = 5000; //5 second
 Device.find({},
     function (err, device) {
       if(err) {

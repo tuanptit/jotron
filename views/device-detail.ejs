@@ -72,7 +72,7 @@
   <!-- Page content -->
   <div class="page-content">
 
-    <!-- Modal -->
+    <!-- Modal  delete-->
     <div id="myModal" class="modal fade" role="dialog">
       <div class="modal modal-demo" style="width: 30%">
         <div class="modal-dialog">
@@ -83,12 +83,57 @@
             </div>
 
             <div class="modal-body with-padding">
-              <p>Bạn có muốn xóa tài sản này không?</p>
+              <p>Bạn có muốn xóa thiết bị này không?</p>
             </div>
 
             <div class="modal-footer">
               <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
               <button type="button" class="btn btn-primary" id="confirm">Đồng ý</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Modal config tx  -->
+    <div id="modal_tx" class="modal fade" role="dialog">
+      <div class="modal modal-demo" style="width: 30%">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h2 class="modal-title">CONFIRMATION!</h2>
+            </div>
+
+            <div class="modal-body with-padding">
+              <p>Are you sure?</p>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+              <button type="button" class="btn btn-primary" id="confirm-tx">Đồng ý</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal config rx  -->
+    <div id="modal_rx" class="modal fade" role="dialog">
+      <div class="modal modal-demo" style="width: 30%">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h2 class="modal-title">CONFIRMATION!</h2>
+            </div>
+
+            <div class="modal-body with-padding">
+              <p>Are you sure?</p>
+            </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
+              <button type="button" class="btn btn-primary" id="confirm-rx">Đồng ý</button>
             </div>
           </div>
         </div>
@@ -107,6 +152,7 @@
         <li  class="active" id="get-system" class=""><a href="#card" data-toggle="tab"><i class="icon-disk"></i>System</a></li>
         <li id="get-alarm" class=""><a href="#alarm" data-toggle="tab"><i class="icon-notification"></i>Alarm</a></li>
         <li><a href="#properties" data-toggle="tab"><i class="icon-info2"></i>Properties</a></li>
+        <li id="config-device"><a href="#config" data-toggle="tab"><i class="icon-info2"></i>Configuration</a></li>
 
       </ul>
       <div class="tab-content">
@@ -231,6 +277,170 @@
           </div>
         </div>
 
+        <!-- Four tab       -->
+        <div style="padding: 0 5%" class="tab-pane fade" id="config">
+          <div class="panel panel-default" id="tx-config" style="display: none">
+            <div class="panel-heading panel-color"><h6 class="panel-title"><i class="icon-insert-template"></i>Configuration TX</h6></div>
+            <div class="table-responsive">
+              <div class="panel-group block" id="">
+
+                <!--Frequency-->
+                <div class="form-group col-sm-12">
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Frequency(kHz)</label>
+                    <div class="col-sm-6">
+                      <input id="tx-frequency" required type="number" min="30000" max="300000" name="tx_frequency" class="form-control" placeholder="133650">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">TX Power(dBm)</label>
+                    <div class="col-sm-6">
+                      <input id="tx-power" required type="number" min="30" max="47" name="tx_power" class="form-control" placeholder="47">
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="form-group col-sm-12">
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Modulation(%)</label>
+                    <div class="col-sm-6">
+                      <input id="tx-modulation" required type="number" min="5" max="95" name="tx_modulation" class="form-control" placeholder="85">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Low Power Level(dBm)</label>
+                    <div class="col-sm-6">
+                      <input id="tx-low-power-lv" required type="number" min="30" max="44" name="tx_low_power_lv" class="form-control" placeholder="33">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-12">
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Force Alarm</label>
+                    <div class="col-sm-6">
+                      <select id="tx-force-alarm" data-placeholder="Type" name="tx_force_alarm"
+                              class="form-control">
+                        <option value="1">ON</option>
+                        <option value="2">OFF</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Force Low Power Level</label>
+                    <div class="col-sm-6">
+                      <select id="tx-force-low" data-placeholder="Type" name="tx_force_low_power"
+                              class="form-control">
+                        <option value="1">ON</option>
+                        <option value="2">OFF</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                  <div class="form-group col-sm-12">
+                      <div class="col-sm-6">
+                          <label class="col-sm-4 control-label text-right">Force PTT</label>
+                          <div class="col-sm-6">
+                              <select id="tx-force-ptt" data-placeholder="Type" name="tx_force_ptt"
+                                      class="form-control">
+                                  <option value="1">ON</option>
+                                  <option value="2">OFF</option>
+                              </select>
+                          </div>
+                      </div>
+                  </div>
+
+                <div class="form-group col-sm-12">
+                  <input id="btn-config-tx" type="submit" value="SUBMIT" class="btn btn-primary pull-right" data-toggle='modal' data-target='#modal_tx'>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel panel-default" id="rx-config" style="display: none;">
+            <div class="panel-heading panel-color"><h6 class="panel-title"><i class="icon-insert-template"></i>Configuration RX</h6></div>
+            <div class="table-responsive">
+              <div class="panel-group block" id="">
+
+                <!--Frequency-->
+                <div class="form-group col-sm-12">
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Frequency(kHz)</label>
+                    <div class="col-sm-6">
+                      <input id="rx-frequency" required type="number" min="30000" max="300000" name="rx_frequency" class="form-control" placeholder="133650">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">S/N SQ Level</label>
+                    <div class="col-sm-6">
+                      <input id="rx-sn-sq-level" required type="number" min="30" max="47" name="rx_sq_level" class="form-control" placeholder="12">
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="form-group col-sm-12">
+
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Line Output Level</label>
+                    <div class="col-sm-6">
+                      <input id="rx-line-out" required type="number" min="30" max="44" name="rx_line_out" class="form-control" placeholder="33">
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Force Mute</label>
+                    <div class="col-sm-6">
+                      <select id="rx-force-mute" data-placeholder="Type" name="rx_force_mute"
+                              class="form-control">
+                        <option value="1">ON</option>
+                        <option value="2">OFF</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="form-group col-sm-12">
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Force Alarm</label>
+                    <div class="col-sm-6">
+                      <select id="rx-force-alarm" data-placeholder="Type" name="rx_force_alarm"
+                              class="form-control">
+                        <option value="1">ON</option>
+                        <option value="2">OFF</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <label class="col-sm-4 control-label text-right">Force SQ</label>
+                    <div class="col-sm-6">
+                      <select id="rx-force-sq" data-placeholder="Type" name="rx_force_sq"
+                              class="form-control">
+                        <option value="1">ON</option>
+                        <option value="2">OFF</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+
+
+
+                <div class="form-group col-sm-12">
+                  <input id="btn-config-rx" type="submit" value="SUBMIT" class="btn btn-primary pull-right" data-toggle='modal' data-target='#modal_rx'>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>

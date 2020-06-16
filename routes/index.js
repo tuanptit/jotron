@@ -40,4 +40,13 @@ router.get('/alarm', function(req, res) {
 router.get('/all/alarm', deviceCtr.getAllAlarm);
 
 router.get('/snmp/:type/:ip', deviceCtr.getSnmpAlarm);
+
+//get tx rx config
+router.get('/tx/:ip', deviceCtr.getTxConfig);
+router.get('/rx/:ip', deviceCtr.getRxConfig);
+
+// update tx rx
+router.post('/tx/config/:ip_address', deviceCtr.configTx);
+router.post('/rx/config/:ip_address', deviceCtr.configRx);
+
 module.exports = router;

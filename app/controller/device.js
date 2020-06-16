@@ -110,6 +110,91 @@ exports.getSnmpAlarm = function (req, res) {
 
 }
 
+exports.getTxConfig = function (req, res) {
+    var ip = req.params.ip;
+    var options = {
+        port: 161,
+        retries: 1,
+        transport: "udp4",
+        trapPort: 162,
+        timeout: 1000,
+        version: snmp.Version1,
+        idBitsSize: 32
+    };
+
+    var session = snmp.createSession(ip, "public", options);
+    // frequency, tx power, modulation, low power level, force alarm, force lower power, force ptt
+    var oids = ["1.3.6.1.4.1.22154.3.1.2.3.4.0","1.3.6.1.4.1.22154.3.1.2.2.1.4.2.0","1.3.6.1.4.1.22154.3.1.2.2.1.4.3.0",
+    "1.3.6.1.4.1.22154.3.1.2.3.15.0", "1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.14.0",
+    "1.3.6.1.4.1.22154.3.1.2.3.10.0"];
+
+    session.get (oids, function (error, varbinds) {
+        if (error) {
+            res.json({
+                code: 0,
+                result: error.toString()
+            })
+        } else {
+            session.close ();
+            var tx = {
+                frequency: varbinds[0].value,
+                tx_power: varbinds[1].value,
+                modulation: varbinds[2].value,
+                low_power_lv: varbinds[3].value,
+                force_alarm: varbinds[4].value,
+                force_low_power: varbinds[5].value,
+                force_ptt: varbinds[6].value
+            }
+            res.json({
+                code: 1,
+                result: tx
+            })
+        }
+    });
+
+}
+exports.getRxConfig = function (req, res) {
+    var ip = req.params.ip;
+    var options = {
+        port: 161,
+        retries: 1,
+        transport: "udp4",
+        trapPort: 162,
+        timeout: 1000,
+        version: snmp.Version1,
+        idBitsSize: 32
+    };
+
+    var session = snmp.createSession(ip, "public", options);
+    // frequency, s/n sq level, line output level, force mute, force alarm, force sq
+    var oids = ["1.3.6.1.4.1.22154.3.1.2.3.4.0","1.3.6.1.4.1.22154.3.1.2.2.2.4.4.0","1.3.6.1.4.1.22154.3.1.2.2.2.4.2.0",
+    "1.3.6.1.4.1.22154.3.1.2.3.17.0","1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.11.0"]
+
+    session.get (oids, function (error, varbinds) {
+        if (error) {
+            res.json({
+                code: 0,
+                result: error.toString()
+            })
+        } else {
+            session.close ();
+            var rx = {
+                frequency: varbinds[0].value,
+                sq_level: varbinds[1].value,
+                line_out: varbinds[2].value,
+                force_mute: varbinds[3].value,
+                force_alarm: varbinds[4].value,
+                force_sq: varbinds[5].value,
+            }
+            res.json({
+                code: 1,
+                result: rx
+            })
+        }
+    });
+
+}
+
 exports.getDeviceById = function(req, res) {
     var id = req.params.id;
     Device.findOne({
@@ -220,6 +305,155 @@ exports.getAllAlarm = function (req, res) {
             })
         }
     })
+}
+
+exports.configTx = function (req, res) {
+    var item = {
+        tx_frequency: req.body.tx_frequency,
+        tx_power:req.body.tx_power,
+        tx_modulation: req.body.tx_modulation,
+        tx_low_power_lv:req.body.tx_low_power_lv,
+        tx_force_alarm: req.body.tx_force_alarm,
+        tx_force_low_power: req.body.tx_force_low_power,
+        tx_force_ptt: req.body.tx_force_ptt
+    }
+    console.log(item)
+    // frequency, tx power, modulation, low power level, force alarm, force lower power, force ptt
+    var oids = ["1.3.6.1.4.1.22154.3.1.2.3.4.0","1.3.6.1.4.1.22154.3.1.2.2.1.4.2.0","1.3.6.1.4.1.22154.3.1.2.2.1.4.3.0",
+        "1.3.6.1.4.1.22154.3.1.2.3.15.0", "1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.14.0",
+        "1.3.6.1.4.1.22154.3.1.2.3.10.0"];
+    var varbinds = [
+        {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.4.0", // frequency
+            type: snmp.ObjectType.INTEGER,
+            value: Number(item.tx_frequency)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.2.1.4.2.0", // tx power
+            type: snmp.ObjectType.INTEGER,
+            value: Number(item.tx_power)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.2.1.4.3.0", // modulation
+            type: snmp.ObjectType.INTEGER,
+            value: Number(item.tx_modulation)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.15.0", // low power level
+            type: snmp.ObjectType.INTEGER,
+            value: Number(item.tx_low_power_lv)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.12.0", // force alarm
+            type: snmp.ObjectType.Integer32,
+            value: Number(item.tx_force_alarm)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.14.0", // force low power
+            type: snmp.ObjectType.Integer32,
+            value: Number(item.tx_force_low_power)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.10.0", // force ptt
+            type: snmp.ObjectType.Integer32,
+            value: Number(item.tx_force_ptt)
+        }
+    ];
+
+    var options = {
+        port: 161,
+        retries: 1,
+        transport: "udp4",
+        trapPort: 162,
+        timeout: 5000,
+        version: snmp.Version1,
+        idBitsSize: 32
+    };
+    var session = snmp.createSession(req.params.ip_address, "public", options);
+    session.set (varbinds, function (error, varbinds) {
+        if (error) {
+            console.log(error)
+            session.close();
+            res.json({
+                code: 0,
+                result: error
+            })
+        } else {
+            console.log(varbinds)
+            session.close();
+            res.json({
+                code: 1,
+                result: varbinds
+            })
+        }
+    });
+
+}
+
+exports.configRx = function (req, res) {
+    var item = {
+        rx_frequency: req.body.rx_frequency,
+        rx_sq_level:req.body.rx_sq_level,
+        rx_line_out: req.body.rx_line_out,
+        rx_force_mute:req.body.rx_force_mute,
+        rx_force_alarm: req.body.rx_force_alarm,
+        rx_force_sq: req.body.rx_force_sq
+    }
+    console.log(item)
+    // frequency, s/n sq level, line output level, force mute, force alarm, force sq
+    var oids = ["1.3.6.1.4.1.22154.3.1.2.3.4.0","1.3.6.1.4.1.22154.3.1.2.2.2.4.4.0","1.3.6.1.4.1.22154.3.1.2.2.2.4.2.0",
+        "1.3.6.1.4.1.22154.3.1.2.3.17.0","1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.11.0"]
+
+    var varbinds = [
+        {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.4.0", // frequency
+            type: snmp.ObjectType.INTEGER,
+            value: Number(item.rx_frequency)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.2.2.4.4.0", // sq level
+            type: snmp.ObjectType.INTEGER,
+            value: Number(item.rx_sq_level)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.2.2.4.2.0", // line out
+            type: snmp.ObjectType.INTEGER,
+            value: Number(item.rx_line_out)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.17.0", // low power level
+            type: snmp.ObjectType.Integer32,
+            value: Number(item.rx_force_mute)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.12.0", // force alarm
+            type: snmp.ObjectType.Integer32,
+            value: Number(item.rx_force_alarm)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.3.11.0", // force sq open
+            type: snmp.ObjectType.Integer32,
+            value: Number(item.rx_force_sq)
+        }
+    ];
+
+    var options = {
+        port: 161,
+        retries: 1,
+        transport: "udp4",
+        trapPort: 162,
+        timeout: 5000,
+        version: snmp.Version1,
+        idBitsSize: 32
+    };
+    var session = snmp.createSession(req.params.ip_address, "public", options);
+    session.set (varbinds, function (error, varbinds) {
+        if (error) {
+            console.log(error)
+            session.close();
+            res.json({
+                code: 0,
+                result: error
+            })
+        } else {
+            console.log(varbinds)
+            session.close();
+            res.json({
+                code: 1,
+                result: varbinds
+            })
+        }
+    });
+
 }
 
 function getNewDeviceAlarm(ip, callback) {

@@ -143,19 +143,6 @@ $(document).ready(function () {
         $("#myModal").modal("hide");
         deleteAsset(idDevice);
     });
-
-    $("#btns-delete").on('click', function () {
-        var id_device = $('#mux-name').attr('data-id');
-        var ajax1 = $.ajax('/delete/'+id_device, {
-            method: 'DELETE',
-            beforeSend: function (){
-                $('body').append('<div class="overlay"><div class="opacity"></div><i class="icon-spinner3 spin"></i></div>');
-                $('.overlay').fadeIn(150);
-            }
-        }).success(function (res) {
-
-        });
-    });
 });
 
 function getLable() {
