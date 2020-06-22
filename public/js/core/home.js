@@ -14,11 +14,12 @@ $(document).ready(function () {
         var result = res.result;
         console.log(result)
         for(var i = 0; i < result.length; i++) {
-            $('#list-device').append("<li id='"+result[i]._id+"' class='bg-success'>" +
+            $('#list-device').append("<li id='"+result[i]._id+"' class='bg-danger'>" +
                 "<div class='top-info'>" +
                 "<a href='/device/"+result[i]._id+"'>"+result[i].name+"</a>"+
                 "</div>"+
                 "<a href='/device/"+result[i]._id+"'><i class='icon-stats2'></i></a>"+
+                "<p class='connect-status'>PINGING...</p>"+
                 "<span class='bottom-info bg-primary'>"+result[i].ip_address+"</span>"+
                 "</li>")
         }

@@ -126,7 +126,7 @@ exports.getTxConfig = function (req, res) {
     // frequency, tx power, modulation, low power level, force alarm, force lower power, force ptt
     var oids = ["1.3.6.1.4.1.22154.3.1.2.3.4.0","1.3.6.1.4.1.22154.3.1.2.2.1.4.2.0","1.3.6.1.4.1.22154.3.1.2.2.1.4.3.0",
     "1.3.6.1.4.1.22154.3.1.2.3.15.0", "1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.14.0",
-    "1.3.6.1.4.1.22154.3.1.2.3.10.0"];
+    "1.3.6.1.4.1.22154.3.1.2.3.10.0","1.3.6.1.4.1.22154.3.1.2.2.3.4.5.0"];
 
     session.get (oids, function (error, varbinds) {
         if (error) {
@@ -143,7 +143,8 @@ exports.getTxConfig = function (req, res) {
                 low_power_lv: varbinds[3].value,
                 force_alarm: varbinds[4].value,
                 force_low_power: varbinds[5].value,
-                force_ptt: varbinds[6].value
+                force_ptt: varbinds[6].value,
+                trap_port: varbinds[7].value
             }
             res.json({
                 code: 1,
@@ -168,7 +169,8 @@ exports.getRxConfig = function (req, res) {
     var session = snmp.createSession(ip, "public", options);
     // frequency, s/n sq level, line output level, force mute, force alarm, force sq
     var oids = ["1.3.6.1.4.1.22154.3.1.2.3.4.0","1.3.6.1.4.1.22154.3.1.2.2.2.4.4.0","1.3.6.1.4.1.22154.3.1.2.2.2.4.2.0",
-    "1.3.6.1.4.1.22154.3.1.2.3.17.0","1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.11.0"]
+    "1.3.6.1.4.1.22154.3.1.2.3.17.0","1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.11.0",
+        "1.3.6.1.4.1.22154.3.1.2.2.3.4.5.0"]
 
     session.get (oids, function (error, varbinds) {
         if (error) {
@@ -185,6 +187,7 @@ exports.getRxConfig = function (req, res) {
                 force_mute: varbinds[3].value,
                 force_alarm: varbinds[4].value,
                 force_sq: varbinds[5].value,
+                trap_port: varbinds[6].value
             }
             res.json({
                 code: 1,
@@ -315,13 +318,14 @@ exports.configTx = function (req, res) {
         tx_low_power_lv:req.body.tx_low_power_lv,
         tx_force_alarm: req.body.tx_force_alarm,
         tx_force_low_power: req.body.tx_force_low_power,
-        tx_force_ptt: req.body.tx_force_ptt
+        tx_force_ptt: req.body.tx_force_ptt,
+        tx_trap_port: req.body.tx_trap_port
     }
     console.log(item)
-    // frequency, tx power, modulation, low power level, force alarm, force lower power, force ptt
+    // frequency, tx power, modulation, low power level, force alarm, force lower power, force ptt , trap port
     var oids = ["1.3.6.1.4.1.22154.3.1.2.3.4.0","1.3.6.1.4.1.22154.3.1.2.2.1.4.2.0","1.3.6.1.4.1.22154.3.1.2.2.1.4.3.0",
         "1.3.6.1.4.1.22154.3.1.2.3.15.0", "1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.14.0",
-        "1.3.6.1.4.1.22154.3.1.2.3.10.0"];
+        "1.3.6.1.4.1.22154.3.1.2.3.10.0","1.3.6.1.4.1.22154.3.1.2.2.3.4.5.0"];
     var varbinds = [
         {
             oid: "1.3.6.1.4.1.22154.3.1.2.3.4.0", // frequency
@@ -351,6 +355,10 @@ exports.configTx = function (req, res) {
             oid: "1.3.6.1.4.1.22154.3.1.2.3.10.0", // force ptt
             type: snmp.ObjectType.Integer32,
             value: Number(item.tx_force_ptt)
+        },{
+            oid: "1.3.6.1.4.1.22154.3.1.2.2.3.4.5.0", // trap port
+            type: snmp.ObjectType.Integer32,
+            value: Number(item.tx_trap_port)
         }
     ];
 
@@ -391,12 +399,14 @@ exports.configRx = function (req, res) {
         rx_line_out: req.body.rx_line_out,
         rx_force_mute:req.body.rx_force_mute,
         rx_force_alarm: req.body.rx_force_alarm,
-        rx_force_sq: req.body.rx_force_sq
+        rx_force_sq: req.body.rx_force_sq,
+        rx_trap_port: req.body.rx_trap_port
     }
     console.log(item)
     // frequency, s/n sq level, line output level, force mute, force alarm, force sq
     var oids = ["1.3.6.1.4.1.22154.3.1.2.3.4.0","1.3.6.1.4.1.22154.3.1.2.2.2.4.4.0","1.3.6.1.4.1.22154.3.1.2.2.2.4.2.0",
-        "1.3.6.1.4.1.22154.3.1.2.3.17.0","1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.11.0"]
+        "1.3.6.1.4.1.22154.3.1.2.3.17.0","1.3.6.1.4.1.22154.3.1.2.3.12.0", "1.3.6.1.4.1.22154.3.1.2.3.11.0",
+    "1.3.6.1.4.1.22154.3.1.2.2.3.4.5.0"]
 
     var varbinds = [
         {
@@ -423,6 +433,10 @@ exports.configRx = function (req, res) {
             oid: "1.3.6.1.4.1.22154.3.1.2.3.11.0", // force sq open
             type: snmp.ObjectType.Integer32,
             value: Number(item.rx_force_sq)
+        }, {
+            oid: "1.3.6.1.4.1.22154.3.1.2.2.3.4.5.0", // force sq open
+            type: snmp.ObjectType.Integer32,
+            value: Number(item.rx_trap_port)
         }
     ];
 

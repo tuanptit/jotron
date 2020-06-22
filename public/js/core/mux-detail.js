@@ -30,6 +30,7 @@ $(document).ready(function () {
                     $('#tx-force-alarm').val(data.force_alarm);
                     $('#tx-force-low').val(data.force_low_power);
                     $('#tx-force-ptt').val(data.force_ptt);
+                    $('#tx-trap-port').val(data.trap_port)
                 }
 
                 $('#confirm-tx').unbind();
@@ -43,7 +44,8 @@ $(document).ready(function () {
                         tx_low_power_lv: $('#tx-low-power-lv').val(),
                         tx_force_alarm: $('#tx-force-alarm').val(),
                         tx_force_low_power: $('#tx-force-low').val(),
-                        tx_force_ptt: $('#tx-force-ptt').val()
+                        tx_force_ptt: $('#tx-force-ptt').val(),
+                        tx_trap_port: $('#tx-trap-port').val()
                     }
                     $.ajax('/tx/config/'+$('#device-ip span').text(), {
                         method: 'POST',
@@ -97,6 +99,7 @@ $(document).ready(function () {
                     $('#rx-force-mute').val(data.force_mute);
                     $('#rx-force-alarm').val(data.force_alarm);
                     $('#rx-force-sq').val(data.force_sq);
+                    $('#rx-trap-port').val(data.trap_port);
 
                     $('#confirm-rx').unbind();
                     $('#confirm-rx').on('click', function () {
@@ -108,6 +111,7 @@ $(document).ready(function () {
                             rx_force_mute: $('#rx-force-mute').val(),
                             rx_force_alarm: $('#rx-force-alarm').val(),
                             rx_force_sq: $('#rx-force-sq').val(),
+                            rx_trap_port: $('#rx-trap-port').val()
                         }
 
                         $.ajax('/rx/config/'+$('#device-ip span').text(), {

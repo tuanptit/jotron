@@ -64,6 +64,7 @@
                 // $(item).removeClass('bg-danger').addClass('bg-success');
                 if(ip == ip_error) {
                     $(item).removeClass('bg-success').addClass('bg-danger');
+                    $(item).find('.connect-status').text('PING_ERROR')
                 }
             })
         });
@@ -75,6 +76,7 @@
                 var ip = $(item).find('.bottom-info').text();
                 if(ip == ip_ok) {
                     $(item).removeClass('bg-danger').addClass('bg-success');
+                    $(item).find('.connect-status').text('PING_OK')
                 }
             })
         });
